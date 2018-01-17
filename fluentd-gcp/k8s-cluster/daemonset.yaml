@@ -22,7 +22,7 @@ spec:
       dnsPolicy: Default
       containers:
       - name: fluentd-gcp
-        image: xxxx:xxxx
+        image: xxxx
         command:
           - '/bin/sh'
           - '-c'

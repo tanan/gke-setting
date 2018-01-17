@@ -46,7 +46,13 @@ data:
       dataset kubernetes
       table logs
 
+      <inject>
+        time_key "time"
+        time_format "%s"
+      </inject>
+
       schema [
+        { "name": "time", "type": "TIMESTAMP" },
         { "name": "log", "type": "STRING" },
         { "name": "stream", "type": "STRING" }
       ]
