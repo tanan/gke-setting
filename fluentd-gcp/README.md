@@ -1,8 +1,8 @@
 # gke-setting
 
-* configmap.yaml
-** json_keyのprivate_key, client_emailを編集してください
-** projectはGCPのプロジェクトを指定してください
+## configmap.yaml
+* edit a json_key("private_key", "client_email") to your own key.
+* edit a project to your own project.
 
-* daemonset.yaml
-** image名をご自身のものに編集してください
+## daemonset.yaml
+* edit an image name to your own image.
