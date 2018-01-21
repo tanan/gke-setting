@@ -25,13 +25,18 @@ $ gcloud compute disks create --size 200GB wordpress-disk
 ```
 
 ### secret作成
+* mysqlのパスワードをsecretに登録（YOUR_PASSWORDは各自のパスワードを設定）
 ```
-$ kubectl create secret generic mysql --from-literal=password=YOUR_PASSWORD
+$ kubectl create secret generic mysql --from-literal=password=<YOUR_PASSWORD>
 ```
 
 ### サービス作成
+* 当gitリポジトリをclone
 ```
 $ git clone https://github.com/tanan/gke-setting.git
+```
+* mysql, wordpressサービス作成
+```
 $ cd gke-setting/fluentd-gcp/container
 $ kubectl create -f mysql.yaml
 $ kubectl get pod -l app=mysql
@@ -50,6 +55,7 @@ $ kubectl get svc -l app=wordpress
 NAME        TYPE           CLUSTER-IP      EXTERNAL-IP     PORT(S)        AGE
 wordpress   LoadBalancer   10.55.250.244   <EXTERNAL-IP>   80:30403/TCP   1m
 ```
+
 ### wordpress起動確認
 * 下記にアクセスして、wordpressが起動するか確認する
 ```
@@ -73,7 +79,14 @@ $ docker build . --tag <image_name>
 $ docker push <image_name>
 ```
 
-## 5. ConfigMap設定
+
+## 5. BigQuery設定
+* BigQueryのWeb管理画面から下記を作成する
+  * dataset : kubernetes
+  * table : logs
+  * schema : time(timestamp), log(string), stream(string)
+
+## 6. ConfigMap設定
 * configmap.yaml編集
   * matchディレクティブ内のjson_keyにprivate_key、client_emailを設定
   * matchディレクティブ内のprojectにGCPのproject名を設定
@@ -87,9 +100,9 @@ $ vi configmap.yaml
 $ kubectl apply -f configmap.yaml
 ```
 
-## 6. DaemonSet設定
+## 7. DaemonSet設定
 * daemonset.yaml編集
-  * 25行目のimageにfluentdのイメージ名を設定
+  * 25行目のimageに手順「4. fluentdイメージ作成」で作成したfluentdのイメージ名を設定
   ```
   $ vi daemonset.yaml
   ```
@@ -97,3 +110,6 @@ $ kubectl apply -f configmap.yaml
 ```
 $ kubectl apply -f daemonset.yaml
 ```
+
+## 8. 動作確認
+* wordpressのログがBigQueryで取得できるか確認
