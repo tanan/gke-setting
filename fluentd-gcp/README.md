@@ -1,12 +1,5 @@
 # gke-setting
 
-## configmap.yaml
-* edit a json_key("private_key", "client_email") to your own key.
-* edit a project to your own project.
-
-## daemonset.yaml
-* edit an image name to your own image.
-
 ## 事前準備
 * GCPのプロジェクトを作成する
 * gcloudコマンドが使えるようにしておく
@@ -59,6 +52,49 @@ wordpress   LoadBalancer   10.55.250.244   <EXTERNAL-IP>   80:30403/TCP   1m
 ```
 ### wordpress起動確認
 * 下記にアクセスして、wordpressが起動するか確認する
+```
 http://<EXTERNAL-IP>/
+```
 
-### fluentdイメージ作成
+## fluentdイメージ作成
+* GCPのgitリポジトリをclone
+```
+$ git clone https://github.com/GoogleCloudPlatform/k8s-stackdriver.git
+```
+* Gemfile編集
+```
+$ cd k8s-stackdriver/fluentd-gcp-image
+$ vi Gemfile
+// 下記の通り編集
+// https://gist.github.com/tanan/73bf196f94b0639c35e7a86928995813
+```
+* docker build & push
+```
+$ docker build . --tag <image_name>
+$ docker push <image_name>
+```
+
+## ConfigMap設定
+* configmap.yaml編集
+  * matchディレクティブ内のjson_keyにprivate_key、client_emailを設定
+  * matchディレクティブ内のprojectにGCPのproject名を設定
+
+```
+$ cd gke-setting/fluentd-gcp/k8s-cluster
+$ vi configmap.yaml
+```
+* yaml適用
+```
+$ kubectl apply -f configmap.yaml
+```
+
+## DaemonSet設定
+* daemonset.yaml編集
+  * imageにfluentdのイメージ名を設定
+  ```
+  $ vi configmap.yaml
+  ```
+* yaml適用
+```
+$ kubectl apply -f configmap.yaml
+```
