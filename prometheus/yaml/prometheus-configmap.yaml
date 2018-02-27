@@ -186,13 +186,3 @@ data:
         file_sd_configs:
           - files:
             - '/mnt/etc/node.yml'
-
-    alerting:
-      alertmanagers:
-      - scheme: http
-        path_prefix: /alertmanager
-        static_configs:
-        - targets:
-          - "xxxx"
-    rule_files:
-      - "/etc/prometheus-rules/*.rules.yml"

@@ -15,7 +15,3 @@ spec:
         backend:
           serviceName: prometheus-svc
           servicePort: 9090
-      - path: /alertmanager
-        backend:
-          serviceName: alertmanager-svc
-          servicePort: 9093
