@@ -1,0 +1,35 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: alertmanager
+data:
+  config.yml: |-
+    global:
+      resolve_timeout: 5m
+      slack_api_url: 'https://hooks.slack.com/services/xxxxxxx'
+    templates:
+    - '/etc/alertmanager-templates/*.tmpl'
+    route:
+      group_by: ['alertname', 'cluster', 'service']
+      group_wait: 30s
+      group_interval: 5m
+      repeat_interval: 15m
+      receiver: default
+      routes:
+      - match:
+          severity: slack
+        receiver: slack_alert
+      - match:
+          severity: email
+        receiver: slack_alert
+    receivers:
+    - name: 'default'
+      slack_configs:
+      - channel: '#info-channel'
+        text: '{{ template "slack.devops.text" . }}'
+        send_resolved: true
+    - name: 'slack_alert'
+      slack_configs:
+      - channel: '#alert-channel'
+        text: '{{ template "slack.devops.text" . }}'
+        send_resolved: true

@@ -1,0 +1,7 @@
+apiVersion: v1
+data:
+  url: https://prometheus.example.com
+kind: ConfigMap
+metadata:
+  creationTimestamp: null
+  name: external-url

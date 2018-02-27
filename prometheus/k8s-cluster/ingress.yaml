@@ -1,0 +1,21 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: metrics-ingress
+  namespace: metrics
+  annotations:
+    io.rancher.scheduler.global: "true"
+    http.port: "40001"
+    config: "defaults\ntimeout server 300s"
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /prometheus
+        backend:
+          serviceName: prometheus-svc
+          servicePort: 9090
+      - path: /alertmanager
+        backend:
+          serviceName: alertmanager-svc
+          servicePort: 9093
