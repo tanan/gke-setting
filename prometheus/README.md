@@ -1,7 +1,6 @@
 # 概要
 kubernetesのmetricsをPrometheusを利用して収集する
 
-
 * 事前準備
 * k8s構築
 * コンテナ起動
@@ -42,6 +41,12 @@ $ kubectl proxy
 $ kubectl apply -f namespace.yaml
 ```
 
+* serviceaccount作成
+```
+$ kubectl create serviceaccount prometheus2 --namespace monitoring
+$ kubectl create clusterrolebinding prometheus2 --clusterrole=cluster-admin --serviceaccount=monitoring:prometheus2
+```
+
 * configmap設定
 ```
 $ kubectl -n monitoring apply -f prometheus-configmap.yaml
@@ -62,4 +67,3 @@ $ kubectl -n monitoring apply -f prometheus-service.yaml
 ```
 $ kubectl -n monitoring apply -f ingress.yaml
 ```
-
