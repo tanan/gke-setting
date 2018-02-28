@@ -13,13 +13,14 @@ spec:
       labels:
         app: prometheus
     spec:
+      serviceAccountName: prometheus
       containers:
       - name: prometheus
         image: prom/prometheus:v2.1.0
         args:
         - --config.file=/mnt/etc/prometheus.yml
         - --storage.tsdb.retention=24h
-        - --web.external-url=$(EXTERNAL_URL)/prometheus
+        - --web.external-url=$(EXTERNAL_URL)
         ports:
         - containerPort: 9090
         env:
@@ -33,14 +34,9 @@ spec:
           mountPath: /mnt/etc/
         - name: data-volume
           mountPath: /mnt/data/
-        - name: rules-volume
-          mountPath: /etc/prometheus-rules
       volumes:
       - name: config-volume
         configMap:
           name: prometheus-config
       - name: data-volume
         emptyDir: {}
-      - name: rules-volume
-        configMap:
-          name: prometheus-rules
