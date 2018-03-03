@@ -2,19 +2,18 @@
 kubernetesのmetricsをPrometheusを利用して収集する
 
 * 事前準備
-* k8s構築
+* クラスター構築
+* RBAC設定
 * コンテナ起動
-* node-exporter起動
 * namespace設定
 * configmap設定
   * Prometheus
-  * Prometheus-rules
   * external-url
 * deployment設定
   * Prometheus
 * service設定
   * Prometheus
-* Ingress設定
+* node-exporter起動
 
 
 ## 1. 事前準備
@@ -28,23 +27,30 @@ kubernetesのmetricsをPrometheusを利用して収集する
 $ gcloud container clusters create sample-cluster
 ```
 
-* UI起動
-  下記実施後、ブラウザからlocalhost:8001/uiにアクセスする
+## 3. RBAC設定
+* 自身のserviceaccountに権限付与
 ```
-$ gcloud container clusters get-credentials sample-cluster
-$ kubectl proxy
-```
-
-## 3. コンテナ起動
-* namespace作成
-```
-$ kubectl apply -f namespace.yaml
+$ gcloud info | grep Account
+$ kubectl create clusterrolebinding sample-cluster-admin-binding \
+  --clusterrole=cluster-admin \
+  --user=<gcloud infoで取得したアカウント情報>
 ```
 
 * serviceaccount作成
 ```
-$ kubectl create serviceaccount prometheus2 --namespace monitoring
-$ kubectl create clusterrolebinding prometheus2 --clusterrole=cluster-admin --serviceaccount=monitoring:prometheus2
+$ kubectl create serviceaccount prometheus --namespace monitoring
+```
+
+* clusterRole作成 / Binding
+```
+$ kubectl apply -f role.yaml
+$ kubectl create clusterrolebinding prometheus --clusterrole=all-reader --serviceaccount=monitoring:prometheus
+```
+
+## 4. コンテナ起動
+* namespace作成
+```
+$ kubectl apply -f namespace.yaml
 ```
 
 * configmap設定
@@ -63,7 +69,13 @@ $ kubectl -n monitoring apply -f prometheus-deployment.yaml
 $ kubectl -n monitoring apply -f prometheus-service.yaml
 ```
 
-* ingress設定
-```
-$ kubectl -n monitoring apply -f ingress.yaml
-```
+## 5. firewall設定
+* prometheusポート解放
+VPCネットワーク > ファイアウォールルール > 新規作成
+  * 名前： allow-default-prometheus
+  * ソースフィルタ(IP範囲)： <your client ip>/32
+  * プロトコルとポート： tcp:9090
+
+## 6. 動作確認
+* Prometheusが稼働しているノードのGlobalIPを取得する
+* http://<globalip>:9090 へアクセス
