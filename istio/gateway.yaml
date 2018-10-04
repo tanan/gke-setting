@@ -1,7 +1,7 @@
 apiVersion: networking.istio.io/v1alpha3
 kind: Gateway
 metadata:
-  name: default-gateway
+  name: sample-gateway
   namespace: sample-ns
 spec:
   selector:
