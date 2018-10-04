@@ -1,0 +1,30 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: nginx
+  namespace: sample-ns
+spec:
+  gateways:
+  - sample-gateway
+  hosts:
+  - "sample.hoge.com"
+  http:
+  - match:
+    - headers:
+        x-version:
+          exact: green
+    route:
+    - destination:
+        host: nginx-svc.sample-ns.svc.cluster.local
+        subset: green
+        port:
+          number: 40001
+  - match:
+    - uri:
+        prefix: /
+    route:
+    - destination:
+        host: nginx-svc.sample-ns.svc.cluster.local
+        subset: blue
+        port:
+          number: 40001

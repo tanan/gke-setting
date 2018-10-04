@@ -1,0 +1,17 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: default-gateway
+  namespace: sample-ns
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+  - hosts:
+    - 'sample.hoge.com'
+    - 'sample.foo.com'
+    port:
+      name: http
+      number: 80
+      protocol: HTTP
+
