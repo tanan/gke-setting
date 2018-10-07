@@ -1,5 +1,5 @@
 # 概要
-kubernetesのmetricsをPrometheusを利用して収集する
+KubernetesのmetricsをPrometheusを利用して収集する
 
 * 事前準備
 * クラスター構築
