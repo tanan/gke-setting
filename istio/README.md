@@ -18,7 +18,10 @@ Kubernetesにistioをインストールして、blue/green Deploymentを実現�
 * クラスター作成
 
 ```
-$ gcloud container clusters create istio-cluster
+$ gcloud container clusters create istio-cluster \
+  --cluster-version="1.10.7-gke.2" \
+  --num-nodes=3 \
+  --no-enable-legacy-authorization
 ```
 
 ## 3. RBAC設定
@@ -35,8 +38,8 @@ $ kubectl create clusterrolebinding cluster-admin-binding \
 
 ```
 $ kubectl apply -f install/kubernetes/istio-demo-auth.yaml
-$ kubectl get service -w -n istio-system
-$ kubectl get pods -n istio-system
+$ kubectl get service -n istio-system
+$ kubectl get pods -w -n istio-system
 ```
 
 ## 5. 各種リソースの作成
