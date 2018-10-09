@@ -2,7 +2,7 @@ apiVersion: networking.istio.io/v1alpha3
 kind: Gateway
 metadata:
   name: sample-gateway
-  namespace: sample-ns
+  namespace: default
 spec:
   selector:
     istio: ingressgateway
@@ -14,4 +14,3 @@ spec:
       name: http
       number: 80
       protocol: HTTP
-

@@ -1,8 +1,8 @@
 apiVersion: networking.istio.io/v1alpha3
 kind: DestinationRule
 metadata:
-  name: nginx-destination
-  namespace: sample-ns
+  name: nginx-dr
+  namespace: default
 spec:
   host: nginx-svc.sample-ns.svc.cluster.local
   subsets:

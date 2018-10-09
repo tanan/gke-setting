@@ -1,8 +1,8 @@
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
-  name: nginx
-  namespace: sample-ns
+  name: nginx-ds
+  namespace: default
 spec:
   gateways:
   - sample-gateway
