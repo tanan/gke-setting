@@ -4,3 +4,8 @@ metadata:
   name: sample-ns
   labels:
     istio-injection: enabled
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: istio-gw

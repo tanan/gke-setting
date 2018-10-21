@@ -12,11 +12,11 @@ spec:
   - match:
     - headers:
         x-version:
-          exact: green
+          exact: blue
     route:
     - destination:
         host: nginx-svc
-        subset: green
+        subset: blue
         port:
           number: 40001
   - match:
@@ -25,6 +25,6 @@ spec:
     route:
     - destination:
         host: nginx-svc
-        subset: blue
+        subset: green
         port:
           number: 40001
